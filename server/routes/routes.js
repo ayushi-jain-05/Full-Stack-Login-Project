@@ -1,34 +1,8 @@
-require("dotenv").config();
-const fs = require('fs');
 const path = require('path');
 const express = require("express");
-const cors = require("cors");
+
+const User =require
 const app = express();
-const multer = require('multer');
-const connectDB = require('./db')
-const User = require('../server/models/User')
-app.use(express.json());
-app.use("/", express.static("/"));
-connectDB()
-
-
-
-// Set up the multer middleware for file upload
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		const dir = './public/images/profiles';
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true });
-		}
-		cb(null, dir);
-	},
-	filename: (req, file, cb) => {
-		cb(null, `${req.params.email}-${Date.now()}${path.extname(file.originalname)}`);
-	},
-});
-
-const upload = multer({ storage: storage });
-
 app.post('/profile-pic', upload.single('profilePic'), async (req, res) => {
 	try {
 		const profilePic = {
@@ -48,8 +22,6 @@ app.post('/profile-pic', upload.single('profilePic'), async (req, res) => {
 	}
 });
 
-app.use(cors());
-
 app.post("/userdata", async (req, res) => {
 	const body = req.body
 	let newUser = {
@@ -65,7 +37,6 @@ app.post("/userdata", async (req, res) => {
 		aboutme: body.aboutme,
 		email: body.email
 	}
-	
 	await User.updateOne(
 		{ email: newUser.email },
 		{
@@ -74,21 +45,16 @@ app.post("/userdata", async (req, res) => {
 		upsert: true
 	}
 	);
-
 	return res.json(newUser)
-
 })
 
 app.patch("/editprofile/:email", upload.single('profileImage'), async (req, res) => {
 	try {
 		const body = req.body;
-
 		let user = await User.findOne({ email: req.params.email });
-
 		if (!user) {
 			return res.status(404).send({ msg: 'User not found' });
 		}
-
 		let newUser = {
 			id: body.id,
 			name: body.name,
@@ -99,7 +65,6 @@ app.patch("/editprofile/:email", upload.single('profileImage'), async (req, res)
 			DateofBirth: body.DateofBirth,
 			aboutme: body.aboutme,
 		};
-		
 		if(req.file){
 			const imagePath = path.join(__dirname, 'public/images/profiles', req.file.filename);
 			newUser={
@@ -109,7 +74,6 @@ app.patch("/editprofile/:email", upload.single('profileImage'), async (req, res)
 		}
 		user = await User.updateOne({ email: req.params.email }, { $set: newUser });
 		return res.status(200).send("Successfully Updated");
-        
 	} catch (err) {
 		console.error(err);
 		return res.status(500).send({ msg: 'Internal Server Error' });
@@ -152,6 +116,3 @@ app.get('/fetchdata', async (req, res) => {
 	const user = await User.find();
 	return res.json({ user, totalResults });
 })
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Listenting on port ${PORT}...`));

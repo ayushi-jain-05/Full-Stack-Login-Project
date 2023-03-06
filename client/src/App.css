@@ -1,4 +1,4 @@
-.container {
+/* .container {
   width: 100vw;
   height: 100vh;
   background-color: #f0f8ff;
@@ -6,4 +6,27 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+} */
+/* Styles for desktop devices */
+@media screen and (min-width: 1024px) {
+  .container {
+    width: 1024px;
+    margin: 0 auto;
+  }
+}
+
+/* Styles for tablet devices */
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+  .container {
+    width: 768px;
+    margin: 0 auto;
+  }
+}
+
+/* Styles for mobile devices */
+@media screen and (max-width: 767px) {
+  .container {
+    width: 100%;
+    padding: 0 10px;
+  }
 }

@@ -1,0 +1,55 @@
+/* 
+ */
+nav {
+    height: 60px;
+    line-height: 100px;
+  }
+  
+  nav a.brand-logo {
+    font-size: 24px;
+    color: #fff;
+  }
+  
+  nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    font-size: 18px;
+  }
+  
+  nav ul li a:hover {
+    color: #ccc;
+  }
+  
+  /* Mobile navigation */
+  .sidenav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+  }
+  
+  .sidenav li {
+    display: block;
+  }
+  
+  .sidenav li a {
+    color: #444;
+    font-size: 18px;
+    display: block;
+    padding: 16px;
+  }
+  
+  .sidenav li a:hover {
+    color: #222;
+    background-color: #f1f1f1;
+  }
